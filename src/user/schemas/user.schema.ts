@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 import { Password } from '../../common/services/password-manager';
 
-export const UserSchema = new mongoose.Schema(
+export const UserSchema = new Schema(
   {
     email: String,
     password: String,

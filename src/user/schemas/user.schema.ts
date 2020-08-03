@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Password } from '../../common/services/password-manager';
 
 export const UserSchema = new mongoose.Schema(
   {
@@ -18,4 +19,10 @@ export const UserSchema = new mongoose.Schema(
   },
 );
 
-UserSchema.pre('save', async function(done) {});
+UserSchema.pre('save', async function(done) {
+  if (this.isModified('password')) {
+    const hashed = await Password.toHash(this.get('password'));
+    this.set('password', hashed);
+  }
+  done();
+});

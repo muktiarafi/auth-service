@@ -20,7 +20,7 @@ export class UserService {
     });
 
     if (isExist) {
-      throw new ConflictException('Email already taken');
+      throw new ConflictException(['Email already taken']);
     }
 
     const newUser = this.userModel.create(registerUserDTO);
@@ -33,13 +33,13 @@ export class UserService {
     const user = await this.userModel.findOne({ email });
 
     if (!user) {
-      throw new BadRequestException('Invalid email or password');
+      throw new BadRequestException(['Invalid email or password']);
     }
 
     const isValid = await Password.compare(user.password, password);
 
     if (!isValid) {
-      throw new BadRequestException('Invalid email or password');
+      throw new BadRequestException(['Invalid email or password']);
     }
 
     return user;

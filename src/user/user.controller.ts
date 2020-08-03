@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Req, Res, HttpStatus } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterUserDTO } from './dto/register-user.dto';
-import jwt from 'jsonwebtoken';
+import { sign } from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { LoginUserDTO } from './dto/login-user.dto';
 
@@ -22,7 +22,7 @@ export class UserController {
   ) {
     const user = await this.userService.signIn(loginUserDTO);
 
-    const userJwt = jwt.sign(
+    const userJwt = sign(
       {
         id: user.id,
         email: user.email,
@@ -30,9 +30,11 @@ export class UserController {
       process.env.JWT_KEY,
     );
 
-    req.session = {
+    const cookieData = {
       jwt: userJwt,
     };
+
+    res.cookie('session', cookieData, { signed: false });
 
     res.status(HttpStatus.OK).send(user);
   }

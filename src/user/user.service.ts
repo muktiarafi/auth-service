@@ -2,6 +2,7 @@ import {
   Injectable,
   ConflictException,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -9,6 +10,7 @@ import { RegisterUserDTO } from './dto/register-user.dto';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { User } from './interfaces/user.interface';
 import { Password } from '../common/services/password-manager';
+import { EditUserDTO } from './dto/edit-user.dto';
 
 @Injectable()
 export class UserService {
@@ -41,6 +43,19 @@ export class UserService {
     if (!isValid) {
       throw new BadRequestException(['Invalid email or password']);
     }
+
+    return user;
+  }
+
+  async edit(userId: User['id'], editUserDTO: EditUserDTO) {
+    const user = await this.userModel.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException(['User not found']);
+    }
+
+    user.set({ name: editUserDTO.name });
+    user.save();
 
     return user;
   }

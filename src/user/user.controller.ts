@@ -1,9 +1,18 @@
-import { Controller, Post, Body, Req, Res, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Req,
+  Res,
+  HttpStatus,
+  Put,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterUserDTO } from './dto/register-user.dto';
 import { sign } from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { LoginUserDTO } from './dto/login-user.dto';
+import { EditUserDTO } from './dto/edit-user.dto';
 
 @Controller('auth')
 export class UserController {
@@ -37,5 +46,10 @@ export class UserController {
     res.cookie('session', cookieData, { signed: false });
 
     res.status(HttpStatus.OK).send(user);
+  }
+
+  @Put('/edit')
+  async edit(@Req() req: Request, @Body() editUserDTO: EditUserDTO) {
+    return this.userService.edit(req.currentUser.id, editUserDTO);
   }
 }

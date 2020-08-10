@@ -1,4 +1,4 @@
-import { Injectable, NestMiddleware, Session } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 
@@ -18,10 +18,9 @@ declare global {
 @Injectable()
 export class CurrentUserMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
-    if (!req.cookies.session.jwt) {
+    if (!req.cookies.session) {
       return next();
     }
-
     try {
       const payload = verify(
         req.cookies.session.jwt,

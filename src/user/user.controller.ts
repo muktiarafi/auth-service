@@ -14,7 +14,7 @@ import { Request, Response } from 'express';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { EditUserDTO } from './dto/edit-user.dto';
 
-@Controller('auth')
+@Controller('/api/auth')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

@@ -15,6 +15,6 @@ export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(CurrentUserMiddleware, RequireAuthMiddleware)
-      .forRoutes('/auth/edit');
+      .forRoutes('/api/auth/edit');
   }
 }
